@@ -1,0 +1,3 @@
+/Users/sebastianflores/Desktop/XLZD_LXe/build/CMakeFiles/XLZD_LXe.dir
+/Users/sebastianflores/Desktop/XLZD_LXe/build/CMakeFiles/edit_cache.dir
+/Users/sebastianflores/Desktop/XLZD_LXe/build/CMakeFiles/rebuild_cache.dir

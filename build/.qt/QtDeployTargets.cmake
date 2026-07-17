@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_XLZD_LXe_FILE /Users/sebastianflores/Desktop/XLZD_LXe/build/XLZD_LXe)
+set(__QT_DEPLOY_TARGET_XLZD_LXe_TYPE EXECUTABLE)

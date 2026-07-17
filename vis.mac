@@ -1,0 +1,7 @@
+/vis/open OGL
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 70 20
+/vis/viewer/set/style wireframe
+/vis/scene/add/axes
+/run/initialize
+/run/beamOn 10
