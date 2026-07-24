@@ -5,12 +5,12 @@ MyPrimaryGenerator::MyPrimaryGenerator()
 {
     fParticleGun = new G4ParticleGun(1);
 
-    // Set particle type to gamma
+    // particle type set to gamma
     G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
     fParticleGun->SetParticleDefinition(particle);
-    fParticleGun->SetParticleEnergy(2447.*MeV);
+    fParticleGun->SetParticleEnergy(2447.*keV); // changed from meV*
 
-    // Messenger to change geometry parameters
+    // geometry is parameterized 
     fMessenger = new G4GenericMessenger(this, "/generator/", "Generator settings");
     fMessenger->DeclarePropertyWithUnit("radius", "mm", fLXeRadius, "LXe radius");
     fMessenger->DeclarePropertyWithUnit("halfHeight", "mm", fLXeHalfHeight, "LXe half height");
@@ -23,8 +23,7 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
 
 void MyPrimaryGenerator::GeneratePrimaries(G4Event* anEvent)
 {
-    // Sample random position on the vacuum skin surface
-    // Randomly choose between cylindrical side, top cap, or bottom cap
+    // Sample random position on the vacuum skin surface & randomly choose between cylindrical side, top cap, or bottom cap
     G4double skinRadius = fLXeRadius + fSkinThickness;
     G4double skinHalfHeight = fLXeHalfHeight + fSkinThickness;
 
@@ -44,14 +43,14 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event* anEvent)
         x = skinRadius * std::cos(phi);
         y = skinRadius * std::sin(phi);
     } else if(rand < sideArea + capArea) {
-        // Top cap
+        // top cap
         G4double phi = G4UniformRand() * 2. * M_PI;
         G4double r = skinRadius * std::sqrt(G4UniformRand());
         x = r * std::cos(phi);
         y = r * std::sin(phi);
         z = skinHalfHeight;
     } else {
-        // Bottom cap
+        // bottom cap
         G4double phi = G4UniformRand() * 2. * M_PI;
         G4double r = skinRadius * std::sqrt(G4UniformRand());
         x = r * std::cos(phi);

@@ -9,7 +9,7 @@ MySteppingAction::~MySteppingAction()
 
 void MySteppingAction::UserSteppingAction(const G4Step* step)
 {
-    // Only record energy deposits inside LXe volume
+    // Only record energy deposits inside volume
     G4VPhysicalVolume* volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
     if(!volume) return;
     if(volume->GetLogicalVolume()->GetName() != "logicLXe") return;
@@ -37,14 +37,45 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
     // Deposit energy
     G4double ETPC = edep/MeV;
 
-    // Fill ntuple
-    man->FillNtupleDColumn(0, 0, sx);
-    man->FillNtupleDColumn(0, 1, sy);
-    man->FillNtupleDColumn(0, 2, sz);
-    man->FillNtupleDColumn(0, 3, E0);
-    man->FillNtupleDColumn(0, 4, x);
-    man->FillNtupleDColumn(0, 5, y);
-    man->FillNtupleDColumn(0, 6, z);
-    man->FillNtupleDColumn(0, 7, ETPC);
-    man->AddNtupleRow(0);
+    // Fill ntuple (new outputs added 7/24)
+// Momentum direction
+G4ThreeVector momDir = step->GetPreStepPoint()->GetMomentumDirection();
+G4double px = momDir.x();
+G4double py = momDir.y();
+G4double pz = momDir.z();
+
+// step information
+G4int stepNum = step->GetTrack()->GetCurrentStepNumber();
+G4double stepLength = step->GetStepLength()/mm;
+G4double globalTime = step->GetPreStepPoint()->GetGlobalTime()/ns;
+
+// process name
+G4String processName = "none";
+if(step->GetPostStepPoint()->GetProcessDefinedStep())
+    processName = step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+
+// track info
+G4int trackID = step->GetTrack()->GetTrackID();
+G4int parentID = step->GetTrack()->GetParentID();
+G4String particleType = step->GetTrack()->GetParticleDefinition()->GetParticleName();
+
+man->FillNtupleDColumn(0, 0, sx);
+man->FillNtupleDColumn(0, 1, sy);
+man->FillNtupleDColumn(0, 2, sz);
+man->FillNtupleDColumn(0, 3, E0);
+man->FillNtupleDColumn(0, 4, x);
+man->FillNtupleDColumn(0, 5, y);
+man->FillNtupleDColumn(0, 6, z);
+man->FillNtupleDColumn(0, 7, ETPC);
+man->FillNtupleDColumn(0, 8, px);
+man->FillNtupleDColumn(0, 9, py);
+man->FillNtupleDColumn(0, 10, pz);
+man->FillNtupleIColumn(0, 11, stepNum);
+man->FillNtupleDColumn(0, 12, stepLength);
+man->FillNtupleDColumn(0, 13, globalTime);
+man->FillNtupleSColumn(0, 14, processName);
+man->FillNtupleIColumn(0, 15, trackID);
+man->FillNtupleIColumn(0, 16, parentID);
+man->FillNtupleSColumn(0, 17, particleType);
+man->AddNtupleRow(0);
 }
