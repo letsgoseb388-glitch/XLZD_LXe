@@ -1,3 +1,4 @@
 *.root
 *.h5
 build/
+simulation_data/
