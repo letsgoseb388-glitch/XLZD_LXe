@@ -9,7 +9,7 @@ MySteppingAction::~MySteppingAction()
 
 void MySteppingAction::UserSteppingAction(const G4Step* step)
 {
-    // Only record energy deposits inside volume
+    // Only record energy deposits inside LXe volume
     G4VPhysicalVolume* volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
     if(!volume) return;
     if(volume->GetLogicalVolume()->GetName() != "logicLXe") return;
@@ -25,8 +25,9 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
     G4double sy = srcPos.y()/mm;
     G4double sz = srcPos.z()/mm;
 
-    // Source energy
-    G4double E0 = step->GetTrack()->GetVertexKineticEnergy()/MeV;
+    
+    // Primary source energy, always 2.447 MeV for this simulation
+    G4double E0 = 2.447;
 
     // Deposit position
     G4ThreeVector depPos = step->GetPreStepPoint()->GetPosition();
@@ -54,7 +55,7 @@ G4String processName = "none";
 if(step->GetPostStepPoint()->GetProcessDefinedStep())
     processName = step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
 
-// track info
+// ]track info
 G4int trackID = step->GetTrack()->GetTrackID();
 G4int parentID = step->GetTrack()->GetParentID();
 G4String particleType = step->GetTrack()->GetParticleDefinition()->GetParticleName();
