@@ -1,31 +1,53 @@
 import pandas as pd
+import re
 from pathlib import Path
 
-# Define the simulation runs with their metadata
-# (filename_stem, radius_mm, halfheight_mm, fidelity)
-# fidelity: 0=LF, 1=HF
-runs = [
-    ("R100_H100_2447keVgamma", 100, 100, 0, True),
-    ("R200_H200_2447keVgamma", 200, 200, 0, True),
-    ("R300_H300_2447keVgamma", 300, 300, 0, True),
-    ("R400_H400_2447keVgamma", 400, 400, 0, True),
-    ("R500_H500_2447keVgamma", 500, 500, 1, True),
-]
+# Directory holding the simulation CSVs
+data_dir = Path.home() / "Desktop/XLZD_LXe/simulation_data"
+
+# Which geometries are high fidelity (1) vs low fidelity (0).
+# Keyed by the R_H stem, e.g. "R500_H500". Anything not listed defaults to LF (0).
+HF_GEOMETRIES = {
+    "R500_H500",   # original HF run
+    "R90_H108",    # first new HF point
+}
+
+# Pipeline expects z_center in the RAW z-coordinate system of each file.
+# Our simulation outputs z centered on 0 (z runs -H..+H), so z_center = 0.
+Z_CENTER = 0
+
+# Match filenames like: R90_H108_2447keVgamma.csv  ->  R=90, H=108
+pattern = re.compile(r"R(\d+)_H(\d+)_.*\.csv$")
 
 rows = []
-for stem, radius, halfheight, fidelity, realistic in runs:
+for csv_path in sorted(data_dir.glob("*.csv")):
+    name = csv_path.name
+    if name == "file_manifest.csv":
+        continue
+    m = pattern.match(name)
+    if not m:
+        print(f"Skipping (no R/H match): {name}")
+        continue
+
+    radius = int(m.group(1))
+    halfheight = int(m.group(2))
+    stem = f"R{radius}_H{halfheight}"
+    fidelity = 1 if stem in HF_GEOMETRIES else 0
+
     rows.append({
-        "file_stem": stem,
-        "radius_mm": radius,
-        "halfheight_mm": halfheight,
-        "fidelity": fidelity,
-        "energy_keV": 2447,
-        "source": "gamma",
-        "realistic": realistic,
+        "filename": name,        # full filename incl. extension
+        "R": radius,             # detector radius (mm)
+        "Z": halfheight,         # detector centered-z extent / half-height (mm)
+        "z_center": Z_CENTER,    # our data is centered on 0
+        "fidelity": fidelity,    # 0 = LF, 1 = HF
     })
 
-df = pd.DataFrame(rows)
-output_path = Path.home() / "Desktop/XLZD_LXe/simulation_data/file_manifest.csv"
-df.to_csv(output_path, index=False)
-print(f"Manifest saved to {output_path}")
-print(df)
+if not rows:
+    raise SystemExit(f"No matching CSVs found in {data_dir}")
+
+df = pd.DataFrame(rows, columns=["filename", "R", "Z", "z_center", "fidelity"])
+out_path = data_dir / "file_manifest.csv"
+df.to_csv(out_path, index=False)
+
+print(f"Wrote {len(df)} rows to {out_path}\n")
+print(df.to_string(index=False))
