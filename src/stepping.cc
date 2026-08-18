@@ -1,5 +1,9 @@
 #include "stepping.hh"
 #include "G4AnalysisManager.hh"
+#include "G4RunManager.hh"
+#include "G4Event.hh"
+
+
 
 MySteppingAction::MySteppingAction()
 {}
@@ -19,8 +23,9 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
 
     G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-    // Source position (primary vertex)
-    G4ThreeVector srcPos = step->GetTrack()->GetVertexPosition();
+        // Source position (true primary vertex, not the current tracks vertex)
+        const G4Event* evt = G4RunManager::GetRunManager()->GetCurrentEvent();
+    G4ThreeVector srcPos = evt->GetPrimaryVertex()->GetPosition();
     G4double sx = srcPos.x()/mm;
     G4double sy = srcPos.y()/mm;
     G4double sz = srcPos.z()/mm;
