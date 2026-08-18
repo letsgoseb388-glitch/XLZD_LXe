@@ -1,0 +1,7 @@
+
+/detector/radius 701 mm
+/detector/halfHeight 1709 mm
+/generator/radius 701 mm
+/generator/halfHeight 1709 mm
+/run/initialize
+/run/beamOn 1000000
