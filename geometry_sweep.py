@@ -48,6 +48,7 @@ for radius, halfheight, nevents, fidelity in geometries:
 /detector/halfHeight {halfheight} mm
 /generator/radius {radius} mm
 /generator/halfHeight {halfheight} mm
+/run/reinitializeGeometry
 /run/beamOn {nevents}
 """
     mac_path = build_dir / "run_sweep.mac"
