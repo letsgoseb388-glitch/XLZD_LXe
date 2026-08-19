@@ -23,6 +23,10 @@ def convert_h5_to_h5(h5_path: str, radius_mm: float, halfheight_mm: float, fidel
             'z':    f['z'][:],
         }
 
+    # Shift z and sz from centered (-H..+H) to bottom-origin (0..2H) to match convention.
+    cols['z']  = cols['z']  + halfheight_mm
+    cols['sz'] = cols['sz'] + halfheight_mm
+
     n = len(cols['E0'])
     global_event_id = np.arange(n, dtype=np.int64)
 

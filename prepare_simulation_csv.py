@@ -21,6 +21,10 @@ def convert_h5_to_csv(h5_path: str, radius_mm: float, halfheight_mm: float, fide
         'z':    f['z'][:],
     })
     f.close()
+
+    # Shift z and sz from centered (-H..+H) to bottom-origin (0..2H) to match convention
+    df['z']  = df['z']  + halfheight_mm
+    df['sz'] = df['sz'] + halfheight_mm
     
     # Add global_event_id
     df.insert(0, 'global_event_id', np.arange(len(df), dtype=np.int64))

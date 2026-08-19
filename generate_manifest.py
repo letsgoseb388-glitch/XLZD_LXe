@@ -12,9 +12,9 @@ HF_GEOMETRIES = {
     "R90_H108",    # first new HF point
 }
 
-# Pipeline expects z_center in the RAW z-coordinate system of each file.
-# Our simulation outputs z centered on 0 (z runs -H..+H), so z_center = 0.
-Z_CENTER = 0
+# Pipeline expects z_center in the coordinate system of each file.
+# The prep scripts shift z to bottom-origin (0..2H), so the center is at the
+# half-height. z_center is set per-file to that value below.
 
 # Match filenames like: R90_H108_2447keVgamma.csv  ->  R=90, H=108
 pattern = re.compile(r"R(\d+)_H(\d+)_.*\.csv$")
@@ -38,7 +38,7 @@ for csv_path in sorted(data_dir.glob("*.csv")):
         "filename": name,        # full filename incl. extension
         "R": radius,             # detector radius (mm)
         "Z": halfheight,         # detector centered-z extent / half-height (mm)
-        "z_center": Z_CENTER,    # our data is centered on 0
+        "z_center": halfheight,  # data shifted to bottom-origin, center is at half-height
         "fidelity": fidelity,    # 0 = LF, 1 = HF
     })
 
