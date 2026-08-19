@@ -23,6 +23,7 @@ public:
     G4double fLXeRadius;
     G4double fLXeHalfHeight;
     G4double fSkinThickness;
+    G4double fEnergyCut;
 
 private:
     G4LogicalVolume* fScoringVolume;

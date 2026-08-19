@@ -18,8 +18,14 @@ void MySteppingAction::UserSteppingAction(const G4Step* step)
     if(!volume) return;
     if(volume->GetLogicalVolume()->GetName() != "logicLXe") return;
 
-    G4double edep = step->GetTotalEnergyDeposit();
+        G4double edep = step->GetTotalEnergyDeposit();
     if(edep <= 0.) return;
+
+    // Energy cut, skip deposits below the threshold set by /detector/energyCut
+
+    const MyDetectorConstruction* det = static_cast<const MyDetectorConstruction*>(
+        G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    if(edep < det->fEnergyCut) return;
 
     G4AnalysisManager* man = G4AnalysisManager::Instance();
 

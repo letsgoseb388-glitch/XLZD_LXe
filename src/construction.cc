@@ -1,11 +1,12 @@
 #include "construction.hh"
 
 MyDetectorConstruction::MyDetectorConstruction()
-: fLXeRadius(650.*mm), fLXeHalfHeight(650.*mm), fSkinThickness(10.*mm)
+: fLXeRadius(650.*mm), fLXeHalfHeight(650.*mm), fSkinThickness(10.*mm), fEnergyCut(0.)
 {
     fMessenger = new G4GenericMessenger(this, "/detector/", "Detector Construction");
     fMessenger->DeclarePropertyWithUnit("radius", "mm", fLXeRadius, "LXe cylinder radius");
     fMessenger->DeclarePropertyWithUnit("halfHeight", "mm", fLXeHalfHeight, "LXe cylinder half height");
+    fMessenger->DeclarePropertyWithUnit("energyCut", "keV", fEnergyCut, "Minimum energy deposit to record");
 }
 
 MyDetectorConstruction::~MyDetectorConstruction()
