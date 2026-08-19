@@ -26,7 +26,7 @@ def convert_h5_to_csv(h5_path: str, radius_mm: float, halfheight_mm: float, fide
     df.insert(0, 'global_event_id', np.arange(len(df), dtype=np.int64))
     
     # Generate filename: R{radius}_H{halfheight}_2447keVgamma.csv
-    component = f"R{int(radius_mm)}_H{int(halfheight_mm)}_F{fidelity}"
+    component = f"R{int(radius_mm)}_H{int(halfheight_mm)}_F{int(fidelity)}"
     filename = f"{component}_2447keVgamma.csv"
     output_path = Path(output_dir) / filename
     
