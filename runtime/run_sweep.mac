@@ -1,0 +1,11 @@
+
+/run/initialize
+/detector/radius 1783 mm
+/detector/halfHeight 1516 mm
+/detector/energyCut 0.05 keV
+/generator/radius 1783 mm
+/generator/halfHeight 1516 mm
+/generator/mode lines
+/generator/spectrumFile ../line_tables/Bi214_lines.txt
+/run/reinitializeGeometry
+/run/beamOn 1000000

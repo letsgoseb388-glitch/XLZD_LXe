@@ -1,0 +1,10 @@
+/run/initialize
+/detector/radius 300 mm
+/detector/halfHeight 300 mm
+/detector/energyCut 0 keV
+/generator/radius 300 mm
+/generator/halfHeight 300 mm
+/run/reinitializeGeometry
+/generator/mode ion
+/generator/isotope Bi214
+/run/beamOn 1000000
